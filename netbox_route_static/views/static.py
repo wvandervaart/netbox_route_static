@@ -25,7 +25,7 @@ class StaticRouteListView(ObjectListView):
     queryset = StaticRoute.objects.all()
     table = StaticRouteTable
     filterset = StaticRouteFilterSet
-    filterset_form = StaticRouteFilterForm
+    #filterset_form = StaticRouteFilterForm
 
 
 @register_model_view(StaticRoute)
