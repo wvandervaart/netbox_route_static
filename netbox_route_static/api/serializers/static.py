@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from dcim.api.nested_serializers import NestedDeviceSerializer
-from ipam.api.nested_serializers import NestedVRFSerializer
+from dcim.api.serializers import NestedDeviceSerializer
+from ipam.api.serializers import NestedVRFSerializer
 from netbox.api.serializers import NetBoxModelSerializer
 from netbox_route_static.models import StaticRoute
 
