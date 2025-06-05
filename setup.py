@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='netbox_route_static',
-    version='0.1.0',
+    version='0.1.1',
     description='NetBox Static Routing',
     long_description='Plugin for documentation of static routing configuration',
     url='https://github.com/wvandervaart/netbox_route_static',
