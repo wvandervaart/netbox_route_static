@@ -1,5 +1,5 @@
 from django.urls import path, include
-
+from utilities.urls import get_model_urls
 from netbox.views.generic import ObjectChangeLogView
 
 from . import views
