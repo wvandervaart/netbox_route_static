@@ -1,7 +1,7 @@
 from ipam.models import VRF
 from dcim.models import Device
 from netbox.forms import NetBoxModelFilterSetForm
-from netbox_routing.models import StaticRoute
+from netbox_route_static.models import StaticRoute
 from utilities.forms.fields import DynamicModelMultipleChoiceField, TagFilterField
 from django.utils.translation import gettext as _
 

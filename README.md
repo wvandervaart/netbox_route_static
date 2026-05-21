@@ -16,9 +16,9 @@ A plugin for tracking all kinds of routing information
 
 ## Compatibility Matrix
 
-|       | Netbox 3.7.x | 
+|       | Netbox 4.x.x | 
 |-------|--------------|
-| 1.0.0 | X            |
+| 0.1.2 | X            |
 
 ## Installation
 

@@ -5,7 +5,7 @@ from ipam.models import VRF
 from netbox.forms import NetBoxModelImportForm
 from utilities.forms.fields import CSVModelChoiceField
 
-from netbox_routing.models import StaticRoute
+from netbox_route_static.models import StaticRoute
 
 __all__ = ("StaticRouteImportForm",)
 
