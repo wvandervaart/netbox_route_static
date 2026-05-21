@@ -35,12 +35,29 @@ class StaticRoute(NetBoxModel):
         help_text='Optional name for this static route'
     )
     metric = models.PositiveSmallIntegerField(
-        verbose_name='Metric'
+        verbose_name='Metric',
+        blank=True,
+        default=1,
     )
-    permanent = models.BooleanField()
-
+    permanent = models.BooleanField(
+        default=False,
+        blank=True,
+        null=True,
+    )
+    tag = models.IntegerField(
+        verbose_name='Route Tag',
+        help_text='Optional tag for this static route',
+        blank=True,
+        null=True,
+    )
     clone_fields = (
-        'vrf', 'metric', 'permanent'
+        'name',
+        'devices',
+        'prefix',
+        'next_hop',
+        'vrf',
+        'metric',
+        'permanent',
     )
     prerequisite_models = (
         'dcim.Device',
@@ -50,11 +67,9 @@ class StaticRoute(NetBoxModel):
     class Meta:
         ordering = ['vrf', 'prefix', 'metric']
         constraints = (
-            #CheckConstraint(check=Q(Q(metric__lte=255) & Q(metric__gte=0)), name='metric_gte_lte'),
-            models.UniqueConstraint(
-                'vrf', 'prefix', 'next_hop',
-                name='%(app_label)s_%(class)s_unique_vrf_prefix_nexthop',
-                violation_error_message="VRF, Prefix and Next Hop must be unique."
+            CheckConstraint(
+                condition=Q(Q(metric__lte=255) & Q(metric__gte=0)),
+                name='metric_gte_lte',
             ),
         )
 
@@ -65,3 +80,14 @@ class StaticRoute(NetBoxModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_route_static:staticroute', args=[self.pk])
+
+    def clean(self):
+        super().clean()
+        if not self.next_hop:
+            raise ValidationError(
+                {
+                    "next_hop": _(
+                        "A route requires a valid next-hop address."
+                    )
+                }
+            )

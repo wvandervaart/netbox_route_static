@@ -1,10 +1,21 @@
 from dcim.filtersets import DeviceFilterSet
 from dcim.models import Device
 from dcim.tables import DeviceTable
-from netbox.views.generic import ObjectListView, ObjectEditView, ObjectView, ObjectDeleteView, ObjectChildrenView
+from netbox.views.generic import (
+    ObjectListView,
+    ObjectEditView,
+    ObjectView,
+    ObjectDeleteView,
+    ObjectChildrenView,
+    BulkDeleteView,
+    BulkEditView,
+    BulkImportView,
+)
 from netbox_route_static.filtersets.static import StaticRouteFilterSet
 from netbox_route_static.forms import StaticRouteForm
+from netbox_route_static.forms.bulk_edit import StaticRouteBulkEditForm
 from netbox_route_static.forms.filtersets.static import StaticRouteFilterForm
+from netbox_route_static.forms.bulk_import import StaticRouteImportForm
 from netbox_route_static.models import StaticRoute
 from netbox_route_static.tables.static import StaticRouteTable
 
@@ -14,29 +25,27 @@ __all__ = (
     'StaticRouteView',
     'StaticRouteDevicesView',
     'StaticRouteEditView',
+    'StaticRouteBulkEditView',
     'StaticRouteDeleteView',
+    'StaticRouteBulkDeleteView',
+    'StaticRouteBulkImportView',
 )
 
 from utilities.views import register_model_view, ViewTab
 
 
-@register_model_view(StaticRoute, name='list')
+@register_model_view(StaticRoute, name='list', path='', detail=False)
 class StaticRouteListView(ObjectListView):
     queryset = StaticRoute.objects.all()
     table = StaticRouteTable
     filterset = StaticRouteFilterSet
-    #filterset_form = StaticRouteFilterForm
+    filterset_form = StaticRouteFilterForm
 
 
 @register_model_view(StaticRoute)
 class StaticRouteView(ObjectView):
     queryset = StaticRoute.objects.all()
     template_name = 'netbox_route_static/staticroute.html'
-
-@register_model_view(StaticRoute, "bulk_delete", path="delete", detail=False)
-class StaticRouteBulkDeleteView(generic.BulkDeleteView):
-    queryset = StaticRoute.objects.all()
-    table = tables.StaticRouteTable
 
 @register_model_view(StaticRoute, name='devices')
 class StaticRouteDevicesView(ObjectChildrenView):
@@ -45,16 +54,18 @@ class StaticRouteDevicesView(ObjectChildrenView):
     child_model = Device
     table = DeviceTable
     filterset = DeviceFilterSet
-    actions = []
     tab = ViewTab(
         label='Assigned Devices',
         badge=lambda obj: Device.objects.filter(static_routes=obj).count(),
+        permission='dcim.view_device',
+        hide_if_empty=True,
     )
 
     def get_children(self, request, parent):
         return self.child_model.objects.filter(static_routes=parent)
 
 
+@register_model_view(StaticRoute, name='add', detail=False)
 @register_model_view(StaticRoute, name='edit')
 class StaticRouteEditView(ObjectEditView):
     queryset = StaticRoute.objects.all()
@@ -65,3 +76,22 @@ class StaticRouteEditView(ObjectEditView):
 class StaticRouteDeleteView(ObjectDeleteView):
     queryset = StaticRoute.objects.all()
     pass
+
+@register_model_view(StaticRoute, name='bulk_edit', detail=False)
+class StaticRouteBulkEditView(BulkEditView):
+    queryset = StaticRoute.objects.all()
+    filterset = StaticRouteFilterSet
+    table = StaticRouteTable
+    form = StaticRouteBulkEditForm
+
+
+@register_model_view(StaticRoute, name='bulk_delete', detail=False)
+class StaticRouteBulkDeleteView(BulkDeleteView):
+    queryset = StaticRoute.objects.all()
+    filterset = StaticRouteFilterSet
+    table = StaticRouteTable
+
+@register_model_view(StaticRoute, name='bulk_import', detail=False)
+class StaticRouteBulkImportView(BulkImportView):
+    queryset = StaticRoute.objects.all()
+    model_form = StaticRouteImportForm
