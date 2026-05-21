@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from netbox.views.generic import ObjectChangeLogView
 
