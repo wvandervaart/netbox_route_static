@@ -34,7 +34,7 @@ __all__ = (
 from utilities.views import register_model_view, ViewTab
 
 
-@register_model_view(StaticRoute, name='list')
+@register_model_view(StaticRoute, name='list', path='', detail=False)
 class StaticRouteListView(ObjectListView):
     queryset = StaticRoute.objects.all()
     table = StaticRouteTable
@@ -54,16 +54,18 @@ class StaticRouteDevicesView(ObjectChildrenView):
     child_model = Device
     table = DeviceTable
     filterset = DeviceFilterSet
-    actions = []
     tab = ViewTab(
         label='Assigned Devices',
         badge=lambda obj: Device.objects.filter(static_routes=obj).count(),
+        permission='dcim.view_device',
+        hide_if_empty=True,
     )
 
     def get_children(self, request, parent):
         return self.child_model.objects.filter(static_routes=parent)
 
 
+@register_model_view(StaticRoute, name='add', detail=False)
 @register_model_view(StaticRoute, name='edit')
 class StaticRouteEditView(ObjectEditView):
     queryset = StaticRoute.objects.all()
