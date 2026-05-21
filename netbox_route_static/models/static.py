@@ -35,9 +35,15 @@ class StaticRoute(NetBoxModel):
         help_text='Optional name for this static route'
     )
     metric = models.PositiveSmallIntegerField(
-        verbose_name='Metric'
+        verbose_name='Metric',
+        blank=True,
+        default=1,
     )
-    permanent = models.BooleanField()
+    permanent = models.BooleanField(
+        default=False,
+        blank=True,
+        null=True,
+    )
     tag = models.IntegerField(
         verbose_name='Route Tag',
         help_text='Optional tag for this static route',
@@ -61,11 +67,9 @@ class StaticRoute(NetBoxModel):
     class Meta:
         ordering = ['vrf', 'prefix', 'metric']
         constraints = (
-            #CheckConstraint(check=Q(Q(metric__lte=255) & Q(metric__gte=0)), name='metric_gte_lte'),
-            models.UniqueConstraint(
-                'vrf', 'prefix', 'next_hop',
-                name='%(app_label)s_%(class)s_unique_vrf_prefix_nexthop',
-                violation_error_message="VRF, Prefix and Next Hop must be unique."
+            CheckConstraint(
+                condition=Q(Q(metric__lte=255) & Q(metric__gte=0)),
+                name='metric_gte_lte',
             ),
         )
 
