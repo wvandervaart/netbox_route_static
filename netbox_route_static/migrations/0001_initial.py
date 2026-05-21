@@ -22,18 +22,49 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='StaticRoute',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(blank=True, default=dict, encoder=django.core.serializers.json.DjangoJSONEncoder)),
+                (
+                    'custom_field_data',
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        encoder=django.core.serializers.json.DjangoJSONEncoder,
+                    ),
+                ),
                 ('prefix', ipam.fields.IPNetworkField()),
                 ('next_hop', netbox_route_static.fields.ip.IPAddressField()),
                 ('name', models.CharField(blank=True, max_length=50, null=True)),
                 ('metric', models.PositiveSmallIntegerField()),
                 ('permanent', models.BooleanField()),
-                ('devices', models.ManyToManyField(related_name='static_routes', to='dcim.device')),
-                ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
-                ('vrf', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='staticroutes', to='ipam.vrf')),
+                (
+                    'devices',
+                    models.ManyToManyField(
+                        related_name='static_routes', to='dcim.device'
+                    ),
+                ),
+                (
+                    'tags',
+                    taggit.managers.TaggableManager(
+                        through='extras.TaggedItem', to='extras.Tag'
+                    ),
+                ),
+                (
+                    'vrf',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='staticroutes',
+                        to='ipam.vrf',
+                    ),
+                ),
             ],
         ),
         migrations.AddConstraint(
