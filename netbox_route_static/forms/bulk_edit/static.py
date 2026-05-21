@@ -35,24 +35,14 @@ class StaticRouteBulkEditForm(NetBoxModelBulkEditForm):
         label=_('Permanent'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False
     )
 
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
-    comments = CommentField()
-
     model = StaticRoute
     fieldsets = (
         FieldSet('devices', 'vrf', 'prefix', 'next_hop', name='Route'),
         FieldSet('metric', 'permanent', name='Attributes'),
-        FieldSet(
-            'description',
-        ),
     )
     nullable_fields = (
         'devices',
         'vrf',
         'metric',
         'permanent',
-        'description',
-        'comments',
     )

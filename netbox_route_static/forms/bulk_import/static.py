@@ -34,7 +34,4 @@ class StaticRouteImportForm(NetBoxModelImportForm):
             "next_hop",
             "metric",
             "permanent",
-            "description",
-            "comments",
-            "tags",
         )
