@@ -1,5 +1,8 @@
 from netbox.plugins import PluginMenuButton, PluginMenuItem, PluginMenu
 
+COL_ADD = 'mdi mdi-plus'
+COL_IMPORT = 'mdi mdi-upload'
+
 static = PluginMenuItem(
     link='plugins:netbox_route_static:staticroute_list',
     link_text='Static Routes',
