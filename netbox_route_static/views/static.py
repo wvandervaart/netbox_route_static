@@ -32,6 +32,7 @@ class StaticRouteListView(ObjectListView):
 class StaticRouteView(ObjectView):
     queryset = StaticRoute.objects.all()
     template_name = 'netbox_route_static/staticroute.html'
+
 @register_model_view(StaticRoute, "bulk_delete", path="delete", detail=False)
 class StaticRouteBulkDeleteView(generic.BulkDeleteView):
     queryset = StaticRoute.objects.all()

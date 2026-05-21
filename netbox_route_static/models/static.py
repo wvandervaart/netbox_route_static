@@ -50,7 +50,7 @@ class StaticRoute(NetBoxModel):
     class Meta:
         ordering = ['vrf', 'prefix', 'metric']
         constraints = (
-            CheckConstraint(check=Q(Q(metric__lte=255) & Q(metric__gte=0)), name='metric_gte_lte'),
+            #CheckConstraint(check=Q(Q(metric__lte=255) & Q(metric__gte=0)), name='metric_gte_lte'),
             models.UniqueConstraint(
                 'vrf', 'prefix', 'next_hop',
                 name='%(app_label)s_%(class)s_unique_vrf_prefix_nexthop',
