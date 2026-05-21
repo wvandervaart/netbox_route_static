@@ -38,9 +38,20 @@ class StaticRoute(NetBoxModel):
         verbose_name='Metric'
     )
     permanent = models.BooleanField()
-
+    tag = models.IntegerField(
+        verbose_name='Route Tag',
+        help_text='Optional tag for this static route',
+        blank=True,
+        null=True,
+    )
     clone_fields = (
-        'vrf', 'metric', 'permanent'
+        'name',
+        'devices',
+        'prefix',
+        'next_hop',
+        'vrf',
+        'metric',
+        'permanent',
     )
     prerequisite_models = (
         'dcim.Device',
@@ -65,3 +76,14 @@ class StaticRoute(NetBoxModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_route_static:staticroute', args=[self.pk])
+
+    def clean(self):
+        super().clean()
+        if not self.interface_next_hop and not self.next_hop:
+            raise ValidationError(
+                {
+                    "next_hop": _(
+                        "A route requires set either an IP next hop or an Interface next hop."
+                    )
+                }
+            )
