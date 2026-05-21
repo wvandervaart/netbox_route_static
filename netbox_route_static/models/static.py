@@ -44,7 +44,7 @@ class StaticRoute(NetBoxModel):
         blank=True,
         null=True,
     )
-    tag = models.IntegerField(
+    tags = models.IntegerField(
         verbose_name='Route Tag',
         help_text='Optional tag for this static route',
         blank=True,
